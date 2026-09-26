@@ -172,12 +172,19 @@ Teknofest kurallarına uygun olarak vuruş sayılabilmesi için aşağıdaki şa
    $$x_{max} \le (W - \text{padding}_x), \quad y_{max} \le (H - \text{padding}_y)$$
 2. **Ölçek Şartı:** Hedef İHA çok uzakta (nokta boyutunda) olmamalıdır:
    $$w \ge 0.025 \times W \quad (\ge 32\text{ px}), \quad h \ge 0.025 \times H \quad (\ge 18\text{ px})$$
-3. **Süreklilik:** Bu şartlar altında sayaç çalışır. Kesintisiz **4.0 saniye** tamamlandığında `BASARILI VURUS` gerçekleşir.
+3. **Süreklilik:** Bu şartlar altında sayaç kesintisiz **4.0 saniye** sayar. 4 saniye tamamlandığı anda `BASARILI VURUS` tescil edilir ve hedef sayacı 1 artırılır.
 
-| Kilitlenme Süreci (1.2s) | Başarılı Kilitlenme ve Vuruş |
+#### 🎯 Kilitlenme ve Vuruş Süreç Aşamaları:
+
+| 1. Aşama: Kilitlenme İlerlemesi (1.9s) | 2. Aşama: Tam Kilitlenme (4.0s) |
 | :---: | :---: |
-| ![Kilitlenme İlerlemesi](assets/lockon_progress.jpg) | ![Başarılı Vuruş](assets/hit_success.jpg) |
-| *Yeşil sayaç ile 4 saniyelik kilitlenme takibi* | *Vuruş tescil edilir, sayaç 1 artırılır* |
+| ![Kilitlenme İlerlemesi](assets/lockon_progress.jpg) | ![Tam Kilitlenme](assets/lockon_complete.jpg) |
+| *Hedef koridorda: Yeşil kilitlenme sayacı (1.9s)* | *4.0 saniye kilitlenme şartı başarıyla tamamlandı* |
+
+| 3. Aşama: 1. Başarılı Vuruş (Vurus: 1) | 4. Aşama: 2. Başarılı Vuruş (Vurus: 2) |
+| :---: | :---: |
+| ![1. Vuruş Başarısı](assets/hit_success.jpg) | ![2. Vuruş Başarısı](assets/multi_lockon.jpg) |
+| *Sol Üst: İlk vuruş tescil edildi (`Vurus: 1`)* | *Görev devamında 2. İHA da vuruldu (`Vurus: 2`)* |
 
 ---
 
@@ -231,16 +238,18 @@ Ekran üzerindeki tüm grafik elemanlar askeri avcı uçağı kask/kokpit HUD fo
 
 ```bash
 UAV/
-├── 📂 assets/                     # README için ekran görüntüleri ve grafikler
-│   ├── comparison.jpg            # Giriş vs İşlenmiş HUD karşılaştırma görseli
-│   ├── hero_banner.jpg           # Ana tanıtım afişi
-│   ├── scan_mode.jpg             # ROI tarama modu görüntüsü
-│   ├── tracking_mode.jpg         # Takip modu görüntüsü
-│   ├── lockon_progress.jpg       # Kilitlenme süreci görüntüsü
-│   ├── hit_success.jpg           # Başarılı vuruş görüntüsü
-│   ├── hud_controls.jpg          # Gaz ve PWM paneli
-│   ├── hud_attitude.jpg          # Yönelim ve irtifa göstergesi
-│   └── target_closeup.jpg        # Hedef İHA yakın plan görüntüsü
+├── 📂 assets/                     # README için doğrulanmış ekran görüntüleri
+│   ├── hero_banner.jpg           # 3.9s kilitlenme ana tanıtım afişi
+│   ├── comparison.jpg            # Ham video vs İşlenmiş HUD karşılaştırma görseli
+│   ├── scan_mode.jpg             # ROI 1/4 tarama modu görüntüsü
+│   ├── tracking_mode.jpg         # Hedef ilk yakalanma anı
+│   ├── target_closeup.jpg        # Hedef İHA yakın plan sınır kutusu detayı
+│   ├── lockon_progress.jpg       # Kilitlenme süreci (1.9s)
+│   ├── lockon_complete.jpg       # Kilitlenme tamamlanma anı (4.0s)
+│   ├── hit_success.jpg           # 1. Başarılı vuruş tescili (Vurus: 1)
+│   ├── multi_lockon.jpg          # 2. Başarılı vuruş tescili (Vurus: 2)
+│   ├── hud_controls.jpg          # Gaz ve PWM telemetri paneli
+│   └── hud_attitude.jpg          # Yönelim ve irtifa göstergesi
 │
 ├── 📂 models/                     # Eğitilmiş derin öğrenme ağırlıkları
 │   ├── best.pt                   # Optimize edilmiş YOLOv8s İHA tespit modeli (~52 MB)
